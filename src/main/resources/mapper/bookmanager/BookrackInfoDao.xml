@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.bookmanager.dao.BookrackInfoDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.bookmanager.entity.BookrackInfoEntity" id="bookrackInfoMap">
+        <result property="bookrackId" column="bookrack_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="bookId" column="book_id"/>
+        <result property="deleted" column="deleted"/>
+        <result property="insertTime" column="insert_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+    <select id="getBookrackList" resultType="java.util.Map">
+        select
+            bi.book_id "bookId",
+            bi.book_name "bookName",
+            bi.book_imageUrl "bookImageUrl",
+            bi.book_txt_url "booktxtUrl"
+        from bookrack_info bri
+                 left join book_info bi
+                           on bri.book_id = bi.book_id
+        where bri.deleted = 0 and bi.deleted = 0 and  bri.user_id = #{userId}
+        order by bri.insert_time desc
+    </select>
+
+
+</mapper>

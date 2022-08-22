@@ -11,6 +11,7 @@ package io.renren.common.utils;
 import org.apache.http.HttpStatus;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -52,12 +53,18 @@ public class R extends HashMap<String, Object> {
 		r.putAll(map);
 		return r;
 	}
-	
+
 	public static R ok() {
 		return new R();
 	}
 
-	public R put(String key, Object value) {
+    public static R okNewMap(Map<String,Map<String,List<Map<String,Object>>>> newMap) {
+		R r = new R();
+		r.putAll(newMap);
+		return r;
+    }
+
+    public R put(String key, Object value) {
 		super.put(key, value);
 		return this;
 	}

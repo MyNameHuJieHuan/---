@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.bookmanager.dao.CirculationInfoDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.bookmanager.entity.CirculationInfoEntity" id="circulationInfoMap">
+        <result property="circulationId" column="circulation_id"/>
+        <result property="borrowTime" column="borrow_time"/>
+        <result property="returnTime" column="return_time"/>
+        <result property="status" column="status"/>
+        <result property="userId" column="user_id"/>
+        <result property="bookId" column="book_id"/>
+        <result property="deleted" column="deleted"/>
+        <result property="insertName" column="insert_name"/>
+        <result property="insertTime" column="insert_time"/>
+        <result property="updateName" column="update_name"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+    <select id="getCirculationInfo" resultType="java.util.Map">
+        select *
+        from book_info bi
+            left join book_address ba
+            on ba.address_id = bi.address_id
+        <if test="statuss == 1">
+            left join circulation_info ci
+            on ci.book_id = bi.book_id
+            left join sys_user su
+            on su.user_id = ci.user_id
+        </if>
+        where bi.deleted = 0 and bi.book_code = #{isbnCode}
+        <if test="statuss == 1">
+            and ci.deleted = 0
+        </if>
+    </select>
+    <select id="getCirculationByCode" resultType="java.lang.Integer">
+        select count(*)
+        from circulation_info ci
+                 left join book_info bi
+                           on ci.book_id = bi.book_id
+        where bi.deleted = 0 and bi.deleted = 0 and bi.book_code = #{isbnCode}
+    </select>
+    <select id="getCirculationNumberByUserName" resultType="java.util.Map">
+        select count(*)
+        from circulation_info ci
+                 left join sys_user su
+                           on su.user_id = ci.user_id
+        where ci.deleted = 0 and su.username = #{user}
+    </select>
+
+
+</mapper>

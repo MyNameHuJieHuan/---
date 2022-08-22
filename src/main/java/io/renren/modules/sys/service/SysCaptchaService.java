@@ -23,7 +23,7 @@ public interface SysCaptchaService extends IService<SysCaptchaEntity> {
     /**
      * 获取图片验证码
      */
-    BufferedImage getCaptcha(String uuid);
+    BufferedImage getCaptcha(String uuid,String olduuid);
 
     /**
      * 验证码效验

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.bookmanager.dao.MessageDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.bookmanager.entity.MessageEntity" id="messageMap">
+        <result property="messageId" column="message_id"/>
+        <result property="sendId" column="send_id"/>
+        <result property="receiveId" column="receive_id"/>
+        <result property="messageInfo" column="message_info"/>
+        <result property="insertTime" column="insert_time"/>
+        <result property="deleted" column="deleted"/>
+        <result property="insertName" column="insert_name"/>
+    </resultMap>
+    <select id="getMessageInfo" resultType="java.util.Map">
+        select distinct
+            su.username "sendUserName",
+            su.user_id "sendUserId"
+        from message  mess
+                 left join sys_user su
+                           on su.user_id = mess.send_id
+                 left join sys_user su1
+                           on su1.user_id = mess.receive_id
+        where mess.receive_id = #{userId}
+    </select>
+<!--    根据两个人的Id获取两个人之间的通话记录-->
+    <select id="getMessageDetail" resultType="java.util.Map">
+        select
+            mess.message_id,
+            su.username "sendUserName",
+            su.user_id "sendUserId",
+            mess.send_id "sendId",
+            mess.receive_id "receiveId",
+            mess.insert_time "insertTime",
+            mess.message_info "messageInfo"
+        from message  mess
+                 left join sys_user su
+                           on su.user_id = mess.send_id
+        where (mess.send_id = #{sendUserId} and mess.receive_id = #{receivedUserId}) or (mess.receive_id = #{sendUserId}  and mess.send_id = #{receivedUserId})
+        order by mess.insert_time
+    </select>
+    <select id="getManagerInfo" resultType="java.util.Map">
+        select distinct
+            su.username "sendUserName",
+            su.user_id "sendUserId"
+        from sys_user su
+        where su.user_id != #{userId} and su.user_id !=1
+    </select>
+
+
+</mapper>

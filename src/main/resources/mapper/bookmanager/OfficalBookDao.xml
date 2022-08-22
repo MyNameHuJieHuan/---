@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.bookmanager.dao.OfficalBookDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.bookmanager.entity.OfficalBookEntity" id="officalBookMap">
+        <result property="id" column="id"/>
+        <result property="isbn" column="ISBN"/>
+        <result property="bookName" column="book_name"/>
+        <result property="bookPress" column="book_press"/>
+        <result property="author" column="author"/>
+        <result property="pressTime" column="press_time"/>
+        <result property="pricing" column="pricing"/>
+        <result property="category" column="category"/>
+        <result property="language" column="language"/>
+        <result property="imageUrl" column="image_url"/>
+        <result property="booktxtUrl" column="bookTxt_url"/>
+    </resultMap>
+    <select id="getBookInfo" resultType="java.util.Map">
+        select *
+        from offical_book ob
+        where ob.ISBN = #{isbnCode}
+    </select>
+
+
+</mapper>

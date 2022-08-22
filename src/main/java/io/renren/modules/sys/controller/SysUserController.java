@@ -110,12 +110,19 @@ public class SysUserController extends AbstractController {
 	@PostMapping("/save")
 	@RequiresPermissions("sys:user:save")
 	public R save(@RequestBody SysUserEntity user){
-		ValidatorUtils.validateEntity(user, AddGroup.class);
-		
-		user.setCreateUserId(getUserId());
-		sysUserService.saveUser(user);
-		
-		return R.ok();
+//		查询当前用户的用户名是否已经存在于系统中
+		String userName = user.getUsername();
+//		判断系统中是否存在重复的
+		int count = sysUserService.getIsHasUserName(userName);
+		if (count==0){
+			ValidatorUtils.validateEntity(user, AddGroup.class);
+
+			user.setCreateUserId(getUserId());
+			sysUserService.saveUser(user);
+			return R.ok();
+		}
+		return R.error("该用户名已经被注册了");
+
 	}
 	
 	/**
@@ -152,4 +159,11 @@ public class SysUserController extends AbstractController {
 		
 		return R.ok();
 	}
+//	获取所有的读者信息
+	@GetMapping("/getReaderList")
+	public R getReaderList(@RequestParam Map<String, Object> params){
+		List<Map<String,Object>> list = sysUserService.getReaderNameList();
+		return R.ok().put("list", list);
+	}
+
 }

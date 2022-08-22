@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.bookmanager.dao.CategoryDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.bookmanager.entity.CategoryEntity" id="categoryMap">
+        <result property="categoryId" column="category_id"/>
+        <result property="categoryCode" column="category_code"/>
+        <result property="categoryName" column="category_name"/>
+        <result property="deleted" column="deleted"/>
+        <result property="insertName" column="insert_name"/>
+        <result property="insertTime" column="insert_time"/>
+        <result property="updateName" column="update_name"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+    <select id="getFatherList" parameterType="java.lang.Integer" resultType="java.util.Map">
+        select
+            cate.category_id "categoryId",
+            cate.category_name "categoryName"
+        from category cate
+        where cate.father_id = #{categoryId} and cate.deleted = 0
+    </select>
+    <select id="getCategory" resultType="java.lang.Integer">
+        select count(*)
+        from category cate
+        where cate.category_name =#{categoryName} and cate.deleted = 0
+    </select>
+    <select id="getCategoryIdByName" resultType="java.util.Map">
+        select
+               cate.category_id "categoryId",
+               cate.category_name "categoryName"
+        from category cate
+        where cate.category_name = #{categoryName} and cate.deleted = 0
+    </select>
+    <select id="getCategoryNameById" resultType="java.util.Map">
+        select
+            cate.category_id "categoryId",
+            cate.category_name "categoryName",
+            cate.category_code "categoryCode"
+        from category cate
+        where cate.deleted = 0 and cate.category_id = #{categoryId}
+    </select>
+    <select id="getCategoryListByCode" resultType="java.util.Map">
+        select
+            cate.category_id "categoryId",
+            cate.category_name "categoryName",
+            cate.category_code "categoryCode"
+        from category cate
+        where cate.deleted =0 and cate.category_code like #{categoryCode}
+    </select>
+    <select id="getCategoryNameByCode" resultType="java.util.Map">
+        select
+            cate.category_id "categoryId",
+            cate.category_name "categoryName",
+            cate.category_code "categoryCode"
+        from category cate
+        where cate.deleted = 0 and cate.category_code = #{categoryCode}
+    </select>
+    <select id="getCategoryNameList" resultType="java.util.Map">
+        select
+            cate.category_id "categoryId",
+            cate.category_code "categoryCode",
+            cate.category_name "categoryName"
+        from category cate
+        where cate.deleted = 0
+    </select>
+
+</mapper>

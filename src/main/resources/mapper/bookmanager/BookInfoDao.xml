@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.bookmanager.dao.BookInfoDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.bookmanager.entity.BookInfoEntity" id="bookInfoMap">
+        <result property="bookId" column="book_id"/>
+        <result property="bookName" column="book_name"/>
+        <result property="bookCode" column="book_code"/>
+        <result property="bookPress" column="book_press"/>
+        <result property="categoryCode" column="category_code"/>
+        <result property="libraryId" column="library_id"/>
+        <result property="addressId" column="address_id"/>
+        <result property="bookImageurl" column="book_imageUrl"/>
+        <result property="deleted" column="deleted"/>
+        <result property="insertName" column="insert_name"/>
+        <result property="insertTime" column="insert_time"/>
+        <result property="updateName" column="update_name"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="author" column="author"/>
+        <result property="pricing" column="pricing"/>
+        <result property="pressTime" column="press_time"/>
+        <result property="language" column="language"/>
+        <result property="bookTxtUrl" column="book_txt_url"/>
+    </resultMap>
+    <select id="getBookNameById" resultType="java.util.Map">
+        select
+            book.book_name "bookName",
+            book.BOOK_PRESS "bookPress",
+            category.category_name "bookCategory",
+            library.library_name "libraryName"
+        from book_info book
+                 left join library_info library
+                           on library.library_id = book.library_id
+                 left join category category
+                           on category.category_id = book.category_code
+        where book.deleted = 0 and book.book_id = #{bookId}
+    </select>
+    <select id="getBookList" resultType="java.util.Map">
+        select
+            book.book_name "bookName",
+            book.book_id "bookId"
+        from book_info book
+        where book.deleted = 0
+    </select>
+
+    <select id="getBookInfo" resultType="java.util.Map">
+
+    </select>
+    <select id="selectBookList" resultType="java.util.Map">
+        select
+            bi.book_id "bookId",
+            bi.book_name "bookName",
+            bi.book_code "bookCode",
+            bi.book_press "bookPress",
+            bi.category_code "categoryId",
+            bi.book_imageUrl "bookImageUrl"
+        from book_info bi
+        where bi.book_name like #{con}
+    </select>
+    <select id="selectBookListByCon" resultType="java.util.Map">
+        select *
+        from book_info bi
+        where bi.book_name like #{con}
+    </select>
+    <select id="getBookById" resultType="java.util.Map">
+        select
+            bi.book_id "bookId",
+            bi.book_code "bookCode",
+            bi.book_name "bookName",
+            bi.book_imageUrl "bookImageUrl",
+            bi.book_txt_url "bookTxtUrl",
+            bi.book_press "bookPress"
+        from book_info bi
+        where bi.deleted = 0 and bi.book_id = #{booKId}
+    </select>
+    <select id="getBookIsUserById" resultType="java.lang.Integer">
+        select
+            count(*)
+        from bookrack_info bi
+        where bi.deleted = 0 and bi.user_id = #{userId} and bi.book_id = #{bookId}
+    </select>
+    <select id="getBookByCategoryCode" resultType="java.util.Map">
+        select
+            bi.book_id "bookId",
+            bi.book_name "bookName",
+            bi.book_code "bookCode",
+            bi.book_press "bookPress",
+            bi.category_code "categoryId",
+            bi.book_imageUrl "bookImageUrl"
+        from book_info bi
+                 left join category cate
+                           on bi.category_code = cate.category_id
+        where cate.category_code = #{categoryCode}
+    </select>
+    <select id="getBookByCategoryCodeByUserId" resultType="java.util.Map">
+        select
+            bi.book_id "bookId",
+            bi.book_name "bookName",
+            bi.book_code "bookCode",
+            bi.book_press "bookPress",
+            bi.category_code "categoryId",
+            bi.book_imageUrl "bookImageUrl"
+        from book_info bi
+                 left join category cate
+                           on bi.category_code = cate.category_id
+                 left join bookrack_info bri
+                           on bri.book_id = bi.book_id
+        where ((bri.user_id is not null and bri.user_id != #{userId}) or bri.user_id is null) and cate.category_code = #{categoryCode}
+    </select>
+    <select id="getBookListByCategory" resultType="java.util.Map">
+        select
+            bi.book_id "bookId",
+            bi.book_name "bookName",
+            bi.book_code "bookCode",
+            bi.book_press "bookPress",
+            bi.category_code "categoryId",
+            bi.book_imageUrl "bookImageUrl"
+        from book_info bi
+                 left join category cate
+                           on bi.category_code = cate.category_id
+                 left join bookrack_info bri
+                           on bri.book_id = bi.book_id
+        where ((bri.user_id is not null and bri.user_id != #{userId}) or bri.user_id is null) and cate.category_code like #{categoryCode}
+    </select>
+
+</mapper>

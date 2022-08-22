@@ -20,5 +20,97 @@
 	<select id="queryByUserName" resultType="io.renren.modules.sys.entity.SysUserEntity">
 		select * from sys_user where username = #{username}
 	</select>
+<!--	根据读者ID获取读者相关信息-->
+    <select id="getUserNameById" resultType="java.util.Map">
+		select
+		    user.user_id "userId",
+			user.username "userName",
+			user.email "email",
+			user.mobile "mobile",
+			li.library_name "libraryName",
+			li.library_id "libraryId",
+		    sur.role_id "roleId"
+		from sys_user user
+				 left join sys_user_library sul
+						   on sul.userId = user.user_id
+				 left join library_info li
+						   on li.library_id = sul.libraryId
+				left join sys_user_role  sur
+							on sur.user_id = user.user_id
+		where user.status = 1
+		  and user.user_id = #{userId}
+	</select>
+    <select id="getReaderNameList" resultType="java.util.Map">
+		select
+			user.username "readerName",
+			user.user_id "readerId"
+		from sys_user user
+				 left join sys_user_role role
+						   on role.user_id = user.user_id
+		where user.status = 1 and role.role_id = 2
+	</select>
+    <select id="getUserRoleByUserName" resultType="java.util.Map" parameterType="java.lang.String">
+		select
+		       role.role_id "roleId",
+		       role.role_name "roleName"
+		from sys_user user
+		left join sys_user_role userRole
+			on userRole.user_id = user.user_id
+		left join sys_role role
+			on role.role_id = userRole.role_id
+		where user.username = #{userName}
+	</select>
+    <select id="getIsHasUserName" resultType="java.lang.Integer">
+		select count(*)
+		from sys_user su
+		where su.username = #{userName}
+	</select>
+	<select id="getUserByUserName" resultType="java.util.Map">
+		select
+			user.user_id "userId",
+			user.userName "userName",
+			user.password "password",
+			user.salt "salt",
+			user.email "email",
+			user.mobile "mobile",
+			user.create_user_id "createUserId",
+			user.create_time "createTime",
+		    user.status "status",
+			userRole.role_id "roleId"
+		from sys_user user
+				 left join sys_user_role userRole
+						   on user.user_id = userRole.user_id
+		where userRole.role_id is not null and user.username = #{userName}
+	</select>
+	<select id="getMaxUserId" resultType="java.lang.Long">
+		select
+			max(user_id)+1 "userId"
+		from sys_user user
+	</select>
+	<select id="getReaderByUserName" resultType="java.util.Map">
+		select
+			user.user_id "userId",
+			user.userName "userName",
+			user.password "password",
+			user.salt "salt",
+			user.email "email",
+			user.mobile "mobile",
+			user.create_user_id "createUserId",
+			user.create_time "createTime",
+			user.status "status",
+			userRole.role_id "roleId",
+			di.debit_validity "debitValidity",
+			di.debit_level "debitLevel",
+		    di.status "status",
+		    dl.debit_number "debitNumber"
+		from sys_user user
+				 left join sys_user_role userRole
+						   on user.user_id = userRole.user_id
+				 left join debit_info di
+							on di.user_id = user.user_id
+				left join debit_level dl
+							on dl.debit_level_id = di.debit_level
+		where userRole.role_id is not null and user.username = #{userName}
+	</select>
 
 </mapper>

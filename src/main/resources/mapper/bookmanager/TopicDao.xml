@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.bookmanager.dao.TopicDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.bookmanager.entity.TopicEntity" id="topicMap">
+        <result property="topicId" column="topic_id"/>
+        <result property="title" column="title"/>
+        <result property="optiona" column="optionA"/>
+        <result property="optionb" column="optionB"/>
+        <result property="optionc" column="optionC"/>
+        <result property="optiond" column="optionD"/>
+        <result property="deleted" column="deleted"/>
+        <result property="insertTime" column="insert_time"/>
+        <result property="insertName" column="insert_name"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateName" column="update_name"/>
+    </resultMap>
+    <select id="getSubjectList" resultType="java.util.Map">
+        select
+            top.topic_id "topicId",
+            top.title "title",
+            top.optionA "optionA",
+            top.optionB "optionB",
+            top.optionC "optionC",
+            top.optionD "optionD"
+        from topic top
+        where top.deleted = 0
+    </select>
+
+
+</mapper>

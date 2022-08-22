@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.bookmanager.dao.SubjectDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.bookmanager.entity.SubjectEntity" id="subjectMap">
+        <result property="subjectId" column="subject_id"/>
+        <result property="sujectName" column="suject_name"/>
+        <result property="subjectOption" column="subject_option"/>
+        <result property="deleted" column="deleted"/>
+        <result property="insertName" column="insert_name"/>
+        <result property="insertTime" column="insert_time"/>
+    </resultMap>
+
+
+</mapper>

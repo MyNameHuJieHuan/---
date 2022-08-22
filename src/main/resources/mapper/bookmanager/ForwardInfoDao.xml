@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.bookmanager.dao.ForwardInfoDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.bookmanager.entity.ForwardInfoEntity" id="forwardInfoMap">
+        <result property="forwardId" column="forward_id"/>
+        <result property="forwardCode" column="forward_code"/>
+        <result property="userId" column="user_id"/>
+        <result property="libraryId" column="library_id"/>
+        <result property="deleted" column="deleted"/>
+        <result property="insertName" column="insert_name"/>
+        <result property="updateName" column="update_name"/>
+        <result property="insertTime" column="insert_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="forwardTime" column="forward_time"/>
+    </resultMap>
+<!--    根据userId获取对应的读者的预约记录相关信息-->
+    <select id="getForwardInfoByUserId" parameterType="java.lang.Integer" resultType="java.util.Map">
+        select
+            fi.forward_code "forwardCode",
+            su.email "email",
+            su.mobile "mobile",
+            su.username "userName",
+            li.library_name "libraryName",
+            fi.forward_time "forwardTime"
+        from forward_info fi
+                 left join sys_user su
+                           on su.user_id = fi.user_id
+                 left join library_info li
+                           on fi.library_id = li.library_id
+        where fi.deleted = 0 and fi.user_id = #{userId}
+        order by fi.forward_time desc
+    </select>
+
+
+</mapper>

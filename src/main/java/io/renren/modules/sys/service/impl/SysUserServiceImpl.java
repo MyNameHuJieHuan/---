@@ -41,6 +41,8 @@ import java.util.Map;
 @Service("sysUserService")
 public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> implements SysUserService {
 	@Autowired
+	private SysUserDao sysUserDao;
+	@Autowired
 	private SysUserRoleService sysUserRoleService;
 	@Autowired
 	private SysRoleService sysRoleService;
@@ -142,4 +144,25 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 			throw new RRException("新增用户所选角色，不是本人创建");
 		}
 	}
+
+	@Override
+	public Map<String, Object> getUserNameById(Long userId) {
+		return sysUserDao.getUserNameById(userId);
+	}
+
+	@Override
+	public List<Map<String, Object>> getReaderNameList() {
+		return sysUserDao.getReaderNameList();
+	}
+
+	@Override
+	public int getIsHasUserName(String userName) {
+		return sysUserDao.getIsHasUserName(userName);
+	}
+
+	@Override
+	public Map<String, Object> getUserByUserName(String userName) {
+		return sysUserDao.getUserByUserName(userName);
+	}
+
 }

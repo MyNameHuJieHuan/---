@@ -35,9 +35,13 @@ public class SysCaptchaServiceImpl extends ServiceImpl<SysCaptchaDao, SysCaptcha
     private Producer producer;
 
     @Override
-    public BufferedImage getCaptcha(String uuid) {
+    public BufferedImage getCaptcha(String uuid,String olduuid) {
         if(StringUtils.isBlank(uuid)){
             throw new RRException("uuid不能为空");
+        }
+        if (!StringUtils.isBlank(olduuid)){
+//            删除旧验证码，防止点击验证码过多造成表数据过多
+            this.removeById(olduuid);
         }
         //生成文字验证码
         String code = producer.createText();

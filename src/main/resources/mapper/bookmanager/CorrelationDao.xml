@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.bookmanager.dao.CorrelationDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.bookmanager.entity.CorrelationEntity" id="correlationMap">
+        <result property="correlationId" column="correlation_id"/>
+        <result property="userid" column="userId"/>
+        <result property="categoryCode" column="category_code"/>
+        <result property="correlationStrength" column="correlation_strength"/>
+    </resultMap>
+    <select id="getCorrelationByCategory" resultType="java.util.Map">
+        select
+            corre.correlation_id "correlationId",
+            corre.userId "userId",
+            cate.category_code "categoryCode",
+            cate.category_id "categoryId",
+            corre.correlation_strength "correlationStrength"
+        from correlation corre
+                 left join category cate
+                           on cate.category_code = corre.category_code
+        where cate.category_id = #{categoryId}
+    </select>
+    <select id="getCorrelationByCategoryCode" resultType="java.util.Map">
+        select
+            corre.correlation_id "correlationId",
+            corre.userId "userId",
+            cate.category_code "categoryCode",
+            cate.category_id "categoryId",
+            corre.correlation_strength "correlationStrength"
+        from correlation corre
+                 left join category cate
+                           on cate.category_code = corre.category_code
+        where cate.category_code = #{categoryCode}
+    </select>
+    <select id="getCorrelationByUserId" resultType="java.util.Map">
+        select
+            corr.correlation_id "correlationId",
+            corr.userId "userId",
+            corr.category_code "categoryCode",
+            corr.correlation_strength "correlationStrength"
+        from correlation corr
+        where corr.userId = #{userId}
+        order by correlation_strength desc
+    </select>
+
+
+</mapper>

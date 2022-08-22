@@ -14,6 +14,10 @@ import io.renren.common.validator.ValidatorUtils;
 import io.renren.modules.app.entity.UserEntity;
 import io.renren.modules.app.form.RegisterForm;
 import io.renren.modules.app.service.UserService;
+import io.renren.modules.sys.dao.SysUserDao;
+import io.renren.modules.sys.dao.SysUserRoleDao;
+import io.renren.modules.sys.entity.SysUserEntity;
+import io.renren.modules.sys.entity.SysUserRoleEntity;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -40,16 +44,10 @@ public class AppRegisterController {
     @PostMapping("register")
     @ApiOperation("注册")
     public R register(@RequestBody RegisterForm form){
-        //表单校验
-        ValidatorUtils.validateEntity(form);
-
-        UserEntity user = new UserEntity();
-        user.setMobile(form.getMobile());
-        user.setUsername(form.getMobile());
-        user.setPassword(DigestUtils.sha256Hex(form.getPassword()));
-        user.setCreateTime(new Date());
-        userService.save(user);
-
-        return R.ok();
+        int i =userService.insertForm(form);
+        if (i==3){
+            return R.ok();
+        }
+        return R.error("注册失败");
     }
 }
